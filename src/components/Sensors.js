@@ -134,7 +134,7 @@ const headCells = [
         type: 'date'
     },
     {
-        label: 'Capabilities',
+        label: '',
         type: 'none'
     },
 ];
@@ -185,7 +185,7 @@ function EnhancedTableHead(props) {
 const EnhancedTableToolbar = (props) => {
     const { numSensors } = props
     return (
-        <Toolbar>
+        <Toolbar position="sticky">
             <Typography
                 sx={{ flex: '1 1 100%' }}
                 variant="h6"
@@ -298,78 +298,76 @@ export default function EnhancedTable() {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSensors={rows.length} />
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                    >
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        />
-                        <TableBody>
-                            {rows.slice().sort(getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const isItemOpen = isOpen(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                                    return (
-                                        <>
-                                            <TableRow
-                                                hover
-                                                role="checkbox"
-                                                tabIndex={-1}
-                                                key={row.name}
-                                                selected={isItemSelected}
+                <Table
+                    sx={{ minWidth: 750 }}
+                    stickyHeader
+                >
+                    <EnhancedTableHead
+                        numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={rows.length}
+                    />
+                    <TableBody>
+                        {rows.slice().sort(getComparator(order, orderBy))
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((row, index) => {
+                                const isItemSelected = isSelected(row.name);
+                                const isItemOpen = isOpen(row.name);
+                                const labelId = `enhanced-table-checkbox-${index}`;
+                                return (
+                                    <React.Fragment
+                                        key={row.name}>
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            tabIndex={-1}
+                                            selected={isItemSelected}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    onClick={(event) => handleClick(event, row.name)}
+                                                    color="primary"
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby': labelId,
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
                                             >
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        onClick={(event) => handleClick(event, row.name)}
-                                                        color="primary"
-                                                        checked={isItemSelected}
-                                                        inputProps={{
-                                                            'aria-labelledby': labelId,
-                                                        }}
-                                                    />
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    id={labelId}
-                                                    scope="row"
-                                                    padding="none"
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell align="right">{row.type}</TableCell>
+                                            <TableCell align="right">{row.unit}</TableCell>
+                                            <TableCell align="right">{row.mission}</TableCell>
+                                            <TableCell align="right">{row.aoi}</TableCell>
+                                            <TableCell align="right">{row.start}</TableCell>
+                                            <TableCell align="right">{row.end}</TableCell>
+                                            <TableCell align="right">
+                                                <IconButton
+                                                    aria-label="expand row"
+                                                    size="small"
+                                                    onClick={() => handleOpen(row.name)}
                                                 >
-                                                    {row.name}
-                                                </TableCell>
-                                                <TableCell align="right">{row.type}</TableCell>
-                                                <TableCell align="right">{row.unit}</TableCell>
-                                                <TableCell align="right">{row.mission}</TableCell>
-                                                <TableCell align="right">{row.aoi}</TableCell>
-                                                <TableCell align="right">{row.start}</TableCell>
-                                                <TableCell align="right">{row.end}</TableCell>
-                                                <TableCell align="right">
-                                                    <IconButton
-                                                        aria-label="expand row"
-                                                        size="small"
-                                                        onClick={() => handleOpen(row.name)}
-                                                    >
-                                                        {isItemOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
-                                                    <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
-                                                        <Box sx={{ margin: 1 }}>
-                                                            <Typography variant="h6" gutterBottom component="div">
-                                                                Capabilities
-                                                            </Typography>
-                                                            {/* <Table size="small" aria-label="purchases">
+                                                    {isItemOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow key={row.name + "-ca"}>
+                                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+                                                <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
+                                                    <Box sx={{ margin: 1 }}>
+                                                        <Typography variant="h6" gutterBottom component="div">
+                                                            Capabilities
+                                                        </Typography>
+                                                        {/* <Table size="small" aria-label="purchases">
                                                         <TableHead>
                                                             <TableRow>
                                                                 <TableCell>Date</TableCell>
@@ -393,22 +391,21 @@ export default function EnhancedTable() {
                                                             ))}
                                                         </TableBody>
                                                     </Table> */}
-                                                        </Box>
-                                                    </Collapse>
-                                                </TableCell>
-                                            </TableRow>
-                                        </>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                                    </Box>
+                                                </Collapse>
+                                            </TableCell>
+                                        </TableRow>
+                                    </React.Fragment>
+                                );
+                            })}
+                        {emptyRows > 0 && (
+                            <TableRow
+                            >
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"

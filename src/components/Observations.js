@@ -37,7 +37,8 @@ const rows = [
     { id: 16, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor', description: "description" }
 ];
 
-export default function DataTable() {
+export default function DataTable(props) {
+    const { sensor } = props
     return (
         <div style={{ height: '100%', width: '100%' }}>
             <DataGrid
