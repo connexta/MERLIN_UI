@@ -9,7 +9,7 @@ export default function FlexLayoutManager(props) {
         const flexComponents = getFlexComponents()
         const newComponent = flexComponents.find(component => component.id === componentName)
         if (newComponent !== undefined) {
-            return <newComponent.component />
+            return <newComponent.component node={node} />
         }
     }
     return (

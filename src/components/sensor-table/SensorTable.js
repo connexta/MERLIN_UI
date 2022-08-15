@@ -170,10 +170,9 @@ const getComparator = (
     }
 
 export default function EnhancedTable() {
-    const { sensor, setSensor } = useContext(SensorContext)
+    const { filters, sensors, setSensors } = useContext(SensorContext)
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
-    const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState([]);
@@ -191,14 +190,14 @@ export default function EnhancedTable() {
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.name);
-            setSelected(newSelected);
+            setSensors(newSelected);
             return;
         }
-        setSelected([]);
+        setSensors([]);
     };
 
     const handleClick = (event, name) => {
-        setSelected(handleSelection(name, selected));
+        setSensors(handleSelection(name, sensors));
     };
 
     const handleOpen = (name) => {
@@ -213,7 +212,7 @@ export default function EnhancedTable() {
             newSelected = newSelected.concat(selections, name);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selections.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
+        } else if (selectedIndex === sensors.length - 1) {
             newSelected = newSelected.concat(selections.slice(0, -1));
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(
@@ -233,7 +232,7 @@ export default function EnhancedTable() {
         setPage(0);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isSelected = (name) => sensors.indexOf(name) !== -1;
     const isOpen = (name) => open.indexOf(name) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -251,7 +250,7 @@ export default function EnhancedTable() {
                     >
                         <TableHead
                             headCells={headCells}
-                            numSelected={selected.length}
+                            numSelected={sensors.length}
                             order={order}
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}

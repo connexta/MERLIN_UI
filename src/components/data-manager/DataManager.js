@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 import SockJsClient from 'react-stomp';
-import './App.css';
-import Input from './components/Input/Input';
-import LoginForm from './components/LoginForm';
-import Messages from './components/Messages/Messages';
-import chatAPI from './services/chatapi';
 import { randomColor } from './utils/common';
 
 

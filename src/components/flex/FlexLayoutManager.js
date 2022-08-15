@@ -25,7 +25,7 @@ const layoutStorage = "layoutName"
 
 export default function Container() {
     const [model, setModel] = useState(Model.fromJson(getFlexConfig()));
-    const [sensor, setSensor] = useState(null);
+    const [sensors, setSensors] = useState([]);
     const [filters, setFilters] = useState(getHeaderFilterConfig());
     useEffect(() => {
         const storedLayout = localStorage.getItem(layoutStorage)
@@ -61,7 +61,7 @@ export default function Container() {
         <Wrapper>
             <Header onAddComponent={handleAddComponent} onFilterChange={handleFilterChange} filters={filters} />
             <FlexLayoutWrapper>
-                <SensorContext.Provider value={{ sensor, setSensor, filters }}>
+                <SensorContext.Provider value={{ sensors, setSensors, filters }}>
                     <FlexLayout model={model} setRef={setRef} />
                 </SensorContext.Provider>
             </FlexLayoutWrapper>
