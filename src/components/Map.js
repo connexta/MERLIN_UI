@@ -4,7 +4,9 @@ import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import XYZ from 'ol/source/XYZ'
+// import XYZ from 'ol/source/XYZ'
+import { ZoomOutMapSharp } from '@mui/icons-material';
+import OSM from 'ol/source/OSM';
 
 export default function MapWrapper(props) {
     const [map, setMap] = useState()
@@ -20,14 +22,12 @@ export default function MapWrapper(props) {
             target: mapElement.current,
             layers: [
                 new TileLayer({
-                    source: new XYZ({
-                        url: 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}',
-                    })
+                    source: new OSM()
                 }),
-                initalFeaturesLayer
+                // initalFeaturesLayer
             ],
             view: new View({
-                projection: 'EPSG:3857',
+                // projection: 'EPSG:3857',
                 center: [0, 0],
                 zoom: 2
             }),
