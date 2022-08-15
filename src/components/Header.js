@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,48 +8,45 @@ import FilterList from '@mui/icons-material/FilterList';
 import Add from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
 import Popover from '@mui/material/Popover';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { getFlexComponents } from './FlexUtil';
+import Chip from '@mui/material/Chip';
+import Collapse from '@mui/material/Collapse';
+import AddComponent from './AddComponent'
+import Filter from './Filter'
+import { styled } from '@mui/system';
 
-const AddList = (props) => {
-    const { onSelect, handleClose } = props
-    const flexComponents = getFlexComponents()
-    const handleSelection = (id, label) => () => {
-        onSelect(id, label)
-        handleClose()
-    }
-    return (
-        <Box>
-            <List >
-                {flexComponents.map(component => (
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemText primary={component.label} onClick={handleSelection(component.id, component.label)} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Box>
-    );
-};
+const FilterDisplay = styled('div')({
+    paddingRight: "24px",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "flex-end"
+});
+
+const FilterWrapper = styled('div')({
+    width: "60%",
+    float: "right"
+});
+
+const StyledChip = styled(Chip)({
+    marginLeft: "12px",
+    marginBottom: "12px",
+    color: "white"
+});
+
 
 export default function Header(props) {
-    const { onAddComponent } = props
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [type, setType] = React.useState(null);
-    const handleOpen = (type) => (event) => {
-        setAnchorEl(event.currentTarget);
-        setType(type);
-    };
+    const { onAddComponent, onFilterChange, filters } = props
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [type, setType] = useState(null)
     const handleClose = () => {
         setAnchorEl(null);
         setType(null);
     };
-    const open = Boolean(anchorEl);
+    const handleOpen = (type) => (event) => {
+        setAnchorEl(event.currentTarget);
+        setType(type);
+    };
+    const filterOpen = type === "filter"
+    const addOpen = type === "add"
 
     return (
         <Box>
@@ -78,7 +75,7 @@ export default function Header(props) {
                     </Tooltip>
                     <Popover
                         id={"simple-popover"}
-                        open={open}
+                        open={filterOpen}
                         anchorEl={anchorEl}
                         onClose={handleClose}
                         anchorOrigin={{
@@ -86,11 +83,28 @@ export default function Header(props) {
                             horizontal: 'left',
                         }}
                     >
-                        {type === "filter" ?
-                            <Typography sx={{ p: 2 }}>The Filter content of the Popover.</Typography>
-                            : <AddList onSelect={onAddComponent} handleClose={handleClose} />}
+                        <Filter onFilterChange={onFilterChange} filters={filters} />
+                    </Popover>
+                    <Popover
+                        id={"simple-popover"}
+                        open={addOpen}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                    >
+                        <AddComponent onSelect={onAddComponent} handleClose={handleClose} />
                     </Popover>
                 </Toolbar>
+                <Collapse in={filters.length > 0} timeout="auto" unmountOnExit>
+                    <FilterWrapper>
+                        <FilterDisplay>
+                            {filters.map(filter => <StyledChip key={filter.id} variant="outlined" label={`${filter.label}: ${filter.value}`} />)}
+                        </FilterDisplay>
+                    </FilterWrapper>
+                </Collapse>
             </AppBar>
         </Box>
     );

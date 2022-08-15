@@ -1,5 +1,5 @@
-import Observations from './Observations'
-import Sensors from './Sensors'
+import Observations from '../Observations'
+import Sensors from '../sensor-table/SensorTable'
 
 const components = [{
     id: "sensor-capabilities",
@@ -49,5 +49,5 @@ export function getFlexComponents() {
 }
 
 export function getFlexConfig() {
-    return flexStartConfig //or saved config
+    return flexStartConfig
 }

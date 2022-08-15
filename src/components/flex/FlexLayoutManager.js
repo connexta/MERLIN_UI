@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
-import Header from './Header'
+import { useRef, useState, useEffect, createContext } from 'react';
+import Header from '../Header'
 import FlexLayout from './FlexLayout';
 import { Model } from "flexlayout-react";
 import { getFlexConfig } from './FlexUtil';
@@ -18,11 +18,14 @@ const FlexLayoutWrapper = styled('div')({
     height: "100%"
 });
 
+export const SensorContext = createContext({})
+
 const layoutStorage = "layoutName"
 
 export default function Container() {
     const [model, setModel] = useState(Model.fromJson(getFlexConfig()));
     const [sensor, setSensor] = useState(null);
+    const [filters, setFilters] = useState([]);
     useEffect(() => {
         const storedLayout = localStorage.getItem(layoutStorage)
         if (storedLayout !== null) {
@@ -35,7 +38,7 @@ export default function Container() {
     }
 
     const save = () => {
-        var jsonStr = JSON.stringify(model.toJson(), null, "\t");
+        const jsonStr = JSON.stringify(model.toJson(), null, "\t");
         localStorage.setItem(layoutStorage, jsonStr);
     }
     const debouncedSave = debounce(save, 1000)
@@ -47,13 +50,19 @@ export default function Container() {
         flexRef.current.addTabWithDragAndDropIndirect(`Drag and Drop ${label} to desired location`, { type: "tab", component: id, name: label }, (node) => {
             node.setEventListener("resize", debouncedSave)
         })
-    };
+    }
+
+    const handleFilterChange = (filters) => {
+        setFilters(filters)
+    }
 
     return (
         <Wrapper>
-            <Header onAddComponent={handleAddComponent} />
+            <Header onAddComponent={handleAddComponent} onFilterChange={handleFilterChange} filters={filters} />
             <FlexLayoutWrapper>
-                <FlexLayout model={model} setRef={setRef} sensor={null} />
+                <SensorContext.Provider value={{ sensor, setSensor, filters }}>
+                    <FlexLayout model={model} setRef={setRef} />
+                </SensorContext.Provider>
             </FlexLayoutWrapper>
         </Wrapper>)
 }
