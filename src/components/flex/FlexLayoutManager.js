@@ -2,7 +2,8 @@ import { useRef, useState, useEffect, createContext } from 'react';
 import Header from '../Header'
 import FlexLayout from './FlexLayout';
 import { Model } from "flexlayout-react";
-import { getFlexConfig } from './FlexUtil';
+import { getFlexConfig } from './FlexConfigs';
+import { getHeaderFilterConfig } from '../filter/FilterConfigs';
 import { styled } from '@mui/system';
 import debounce from 'lodash.debounce';
 
@@ -25,7 +26,7 @@ const layoutStorage = "layoutName"
 export default function Container() {
     const [model, setModel] = useState(Model.fromJson(getFlexConfig()));
     const [sensor, setSensor] = useState(null);
-    const [filters, setFilters] = useState([]);
+    const [filters, setFilters] = useState(getHeaderFilterConfig());
     useEffect(() => {
         const storedLayout = localStorage.getItem(layoutStorage)
         if (storedLayout !== null) {

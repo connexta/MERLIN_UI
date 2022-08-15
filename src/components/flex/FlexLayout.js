@@ -1,6 +1,6 @@
 import { Layout } from "flexlayout-react";
 import 'flexlayout-react/style/light.css';
-import { getFlexComponents } from './FlexUtil';
+import { getFlexComponents } from './FlexConfigs';
 
 export default function FlexLayoutManager(props) {
     const { model, setRef } = props

@@ -11,7 +11,7 @@ import Popover from '@mui/material/Popover';
 import Chip from '@mui/material/Chip';
 import Collapse from '@mui/material/Collapse';
 import AddComponent from './AddComponent'
-import Filter from './Filter'
+import Filter from './filter/Filter'
 import { styled } from '@mui/system';
 
 const FilterDisplay = styled('div')({
@@ -47,6 +47,7 @@ export default function Header(props) {
     };
     const filterOpen = type === "filter"
     const addOpen = type === "add"
+    const filterChipsOpen = filters.some(filter => filter.value !== '')
 
     return (
         <Box>
@@ -83,7 +84,7 @@ export default function Header(props) {
                             horizontal: 'left',
                         }}
                     >
-                        <Filter onFilterChange={onFilterChange} filters={filters} />
+                        <Filter onFilterChange={onFilterChange} filters={filters} handleClose={handleClose} />
                     </Popover>
                     <Popover
                         id={"simple-popover"}
@@ -98,10 +99,12 @@ export default function Header(props) {
                         <AddComponent onSelect={onAddComponent} handleClose={handleClose} />
                     </Popover>
                 </Toolbar>
-                <Collapse in={filters.length > 0} timeout="auto" unmountOnExit>
+                <Collapse in={filterChipsOpen} timeout="auto" unmountOnExit>
                     <FilterWrapper>
                         <FilterDisplay>
-                            {filters.map(filter => <StyledChip key={filter.id} variant="outlined" label={`${filter.label}: ${filter.value}`} />)}
+                            {filters.map(filter =>
+                                filter.value !== '' && <StyledChip key={filter.id} variant="outlined" label={`${filter.label}: ${filter.value}`} />
+                            )}
                         </FilterDisplay>
                     </FilterWrapper>
                 </Collapse>
