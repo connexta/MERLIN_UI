@@ -4,8 +4,6 @@ import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-// import XYZ from 'ol/source/XYZ'
-import { ZoomOutMapSharp } from '@mui/icons-material';
 import OSM from 'ol/source/OSM';
 
 export default function MapWrapper(props) {
@@ -24,7 +22,7 @@ export default function MapWrapper(props) {
                 new TileLayer({
                     source: new OSM()
                 }),
-                // initalFeaturesLayer
+                initalFeaturesLayer
             ],
             view: new View({
                 // projection: 'EPSG:3857',
@@ -35,6 +33,7 @@ export default function MapWrapper(props) {
         })
         setMap(initialMap)
         setFeaturesLayer(initalFeaturesLayer)
+        return () => initialMap.setTarget(undefined);
     }, [])
     props.node.setEventListener("resize", (p) => {
         setTimeout(() => { map.updateSize(); }, 200);
