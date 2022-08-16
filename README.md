@@ -1,4 +1,4 @@
-# Merlin Ui
+# Merlin UI
 
 ## Local Development
 
@@ -17,6 +17,22 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser. Next.js features Fast Refresh, components will be automatically re-rendered when a file is updated.
+
+## Local Deployment
+
+Build the container:
+
+```bash
+docker build -t merlin-ui .
+```
+
+Run the container:
+
+```bash
+docker run -p 3000:3000 merlin-ui
+```
+
+Open [http://localhost:3000](http://localhost:3000)
 
 ## Dependencies and Resources
 
