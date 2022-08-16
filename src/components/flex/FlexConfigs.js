@@ -1,6 +1,10 @@
 import Observations from '../Observations'
 import Sensors from '../sensor-table/SensorTable'
-import Map from '../Map'
+import dynamic from 'next/dynamic'
+const DynamicMap = dynamic(() => import('../Map'), {
+    loading: () => <div >Loading</div>,
+    ssr: false,
+})
 
 const components = [{
     id: "sensor-capabilities",
@@ -12,7 +16,7 @@ const components = [{
     label: "Observations"
 }, {
     id: "map",
-    component: Map,
+    component: DynamicMap,
     label: "Map"
 }]
 
