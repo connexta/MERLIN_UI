@@ -1,0 +1,58 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: merlin-ui
+  labels:
+    name: merlin-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: merlin-ui
+  template:
+    metadata:
+      labels:
+        name: merlin-ui
+    spec:
+      containers:
+        - name: merlin-ui
+          image: registry.local/merlin-ui:latest
+          ports:
+            - containerPort: 3000
+              name: merlin-ui-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: merlin-ui-svc
+  labels:
+    run: merlin-ui-svc
+spec:
+  type: NodePort
+  selector:
+    name: merlin-ui
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  name: merlin-ui-ingress
+spec:
+  rules:
+    - host: merlin.localdev.me
+      http:
+        paths:
+          - backend:
+              service:
+                name: merlin-ui-svc
+                port:
+                  number: 3000
+            path: /merlin
+            pathType: Prefix
