@@ -6,14 +6,14 @@ Node.js 12.22.0 or later is required
 
 Install dependencies:
 
-```bash
-npm install
+```shell
+$ npm install
 ```
 
-Run the development server:
+(Optional) Run the development server:
 
-```bash
-npm run dev
+```shell
+$ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser. Next.js features Fast Refresh, components will be automatically re-rendered when a file is updated.
@@ -22,17 +22,40 @@ Open [http://localhost:3000](http://localhost:3000) with your browser. Next.js f
 
 Build the container:
 
-```bash
-docker build -t merlin-ui .
+```shell
+$ docker build -t merlin-ui .
 ```
 
 Run the container:
 
-```bash
-docker run -p 3000:3000 merlin-ui
+```shell
+$ docker run -p 3000:3000 merlin-ui
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Kubernetes Deployment
+The instructions below assume a locally running `Kubernetes` cluster (like k3s) running its own `Docker` registry. 
+Instructions for other configurations may vary.
+
+Tag the container:
+
+```shell
+$ docker tag merlin-ui registry.localdev.me/merlin-ui:latest 
+```
+
+Push it to the local registry:
+
+```shell
+$ docker push registry.localdev.me/merlin-ui:latest
+```
+
+Build the `Kubernetes` artifacts:
+```shell
+$ kubectl apply -f src/kubernetes/merlin-ui.yaml
+```
+
+In a web browser, access `merlin-UI` at `http://merlin.localdev.me/merlin`.
 
 ## Dependencies and Resources
 
