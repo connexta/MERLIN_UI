@@ -103,7 +103,7 @@ export default function Header(props) {
                     <FilterWrapper>
                         <FilterDisplay>
                             {filters.map(filter =>
-                                filter.value !== '' && <StyledChip key={filter.id} variant="outlined" label={`${filter.label}: ${filter.value}`} />
+                                filter.value && <StyledChip key={filter.id} variant="outlined" label={`${filter.label}: ${filter.value}`} />
                             )}
                         </FilterDisplay>
                     </FilterWrapper>

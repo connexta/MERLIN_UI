@@ -12,12 +12,14 @@ const headerFilters = [
     {
         id: "start",
         label: "Start Date",
-        value: ''
+        value: '',
+        type: 'date'
     },
     {
         id: "end",
         label: "End Date",
-        value: ''
+        value: '',
+        type: 'date'
     }
 ]
 
@@ -50,12 +52,14 @@ const snesorTableFilters = [
     {
         id: "start",
         label: "Start Date",
-        value: ''
+        value: '',
+        type: 'date'
     },
     {
         id: "end",
         label: "End Date",
-        value: ''
+        value: '',
+        type: 'date'
     }
 ]
 

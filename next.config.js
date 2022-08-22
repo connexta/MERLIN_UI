@@ -5,6 +5,6 @@ const nextConfig = {
   basePath: '/merlin',
 }
 
-const withTM = require('next-transpile-modules')(['flexlayout-react']); // pass the modules you would like to see transpiled
+const withTM = require('next-transpile-modules')(['flexlayout-react', 'date-fns']);
 
 module.exports = withTM(nextConfig);

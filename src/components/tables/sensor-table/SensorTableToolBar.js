@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Popover from '@mui/material/Popover';
-import Filter from '../filter/Filter'
-import { getSensorTableFilterConfig } from '../filter/FilterConfigs';
+import Filter from '../../filter/Filter'
+import { getSensorTableFilterConfig } from '../../filter/FilterConfigs';
 
 export default function SensorTableToolbar(props) {
     const { numSensors } = props

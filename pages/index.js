@@ -1,5 +1,5 @@
-import FlexLayoutManager from '../src/components/flex/FlexLayoutManager';
+import ContentManager from '../src/components/ContentManager';
 
 export default function Index() {
-  return (<FlexLayoutManager />)
+  return (<ContentManager />)
 }

@@ -5,10 +5,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 function reducer(state, action) {
     if (action.id === "clear") {
-        return state.map(filter => { return { ...filter, value: '' } })
+        return state.map(filter => { return filter.type === 'date' ? { ...filter, value: null } : { ...filter, value: '' } })
     }
     const i = state.findIndex(filter => {
         return filter.id === action.id
@@ -23,7 +26,6 @@ function reducer(state, action) {
     } else if (i === state.length - 1) {
         newState = newState.concat(state.slice(0, -1), newValue);
     } else if (i > 0) {
-        console.log()
         newState = newState.concat(
             state.slice(0, i),
             newValue, state.slice(i + 1)
@@ -37,13 +39,18 @@ export default function Filter(props) {
     const [state, dispatch] = useReducer(reducer, filters)
 
     const handleApplyFilters = () => {
-        onFilterChange(state)
+        const filters = state.map(filter => {
+            if (filter.value === "Invalid Date") {
+                filter.value = ''
+            }
+            return filter
+        })
+        onFilterChange(filters)
         handleClose()
     }
 
     const handleClearFilters = () => {
         dispatch({ id: "clear" })
-        onFilterChange(state)
     }
 
     return (
@@ -57,9 +64,21 @@ export default function Filter(props) {
             <Stack
                 spacing={2}
                 alignItems="center">
-                {state.map(filter =>
+                {state.map(filter => filter.type === "date" ?
+                    <LocalizationProvider dateAdapter={AdapterDateFns} key={filter.id}>
+                        <DesktopDatePicker
+                            label={filter.label}
+                            inputFormat="MM/dd/yyyy"
+                            value={filter.value}
+                            onChange={(value) => {
+                                dispatch({ id: filter.id, value: value.toLocaleDateString() })
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        /></LocalizationProvider>
+                    :
                     <TextField
                         key={filter.id}
+                        sx={{ width: '100%' }}
                         id="outlined-basic"
                         label={filter.label}
                         variant="outlined"

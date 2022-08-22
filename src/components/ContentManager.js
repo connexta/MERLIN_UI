@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect, createContext } from 'react';
-import Header from '../Header'
-import FlexLayout from './FlexLayout';
+import Header from './Header'
+import FlexLayout from './flex/FlexLayout';
 import { Model } from "flexlayout-react";
-import { getFlexConfig } from './FlexConfigs';
-import { getHeaderFilterConfig } from '../filter/FilterConfigs';
+import { getFlexConfig } from './flex/FlexConfigs';
+import { getHeaderFilterConfig } from './filter/FilterConfigs';
 import { styled } from '@mui/system';
 import debounce from 'lodash.debounce';
 
@@ -22,6 +22,7 @@ const FlexLayoutWrapper = styled('div')({
 export const SensorContext = createContext({})
 
 const layoutStorage = "layoutName"
+const filterStorage = "filterName"
 
 export default function Container() {
     const [model, setModel] = useState(Model.fromJson(getFlexConfig()));
@@ -31,6 +32,10 @@ export default function Container() {
         const storedLayout = localStorage.getItem(layoutStorage)
         if (storedLayout !== null) {
             setModel(Model.fromJson(JSON.parse(storedLayout)))
+        }
+        const storedFilters = localStorage.getItem(filterStorage)
+        if (storedFilters !== null) {
+            setFilters(JSON.parse(storedFilters))
         }
     }, [])
     const flexRef = useRef(0);
@@ -54,6 +59,8 @@ export default function Container() {
     }
 
     const handleFilterChange = (filters) => {
+        const jsonStr = JSON.stringify(filters, null, "\t");
+        localStorage.setItem(filterStorage, jsonStr);
         setFilters(filters)
     }
 

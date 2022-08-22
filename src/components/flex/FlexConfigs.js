@@ -1,5 +1,5 @@
-import Observations from '../Observations'
-import Sensors from '../sensor-table/SensorTable'
+import Observations from '../tables/ObservationTable'
+import Sensors from '../tables/sensor-table/SensorTable'
 import dynamic from 'next/dynamic'
 const DynamicMap = dynamic(() => import('../Map'), {
     loading: () => <div >Loading</div>,
