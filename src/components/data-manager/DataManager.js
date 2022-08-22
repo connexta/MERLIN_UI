@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-// import SockJsClient from 'react-stomp';
+import SockJsClient from 'react-stomp';
 
-const SOCKET_URL = '/sensor';
+const SOCKET_URL = 'http://localhost:8080/gs-guide-websocket';
 
 const json = `{
   "longName": "M35-GBOSS",
@@ -88,35 +88,20 @@ const json = `{
 }
 }`
 
-const rows = [
-  { id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-  { id: 1, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-  { id: 2, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-  { id: 3, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-  { id: 4, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-  { id: 5, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-  { id: 6, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 7, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 8, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 9, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 10, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 11, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 12, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 13, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 14, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-  { id: 15, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor3', description: "description" },
-  { id: 16, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor3', description: "thisis a very long description it is very very long" }
-];
-
 export default function DataManager(props) {
   const { onMessage, onConnect } = props
 
-  let onConnected = () => {
+  const onConnected = () => {
     console.log("Connected!!")
     // onConnect()
   }
 
-  let onMessageReceived = (msg) => {
+  const onConnectedFailue = () => {
+    console.log("Connected!!")
+    // onConnect()
+  }
+
+  const onMessageReceived = (msg) => {
     console.log('New Message Received!!', msg);
     onMessage(msg)
   }
@@ -127,14 +112,14 @@ export default function DataManager(props) {
   }, [])
 
   return (
-    // <SockJsClient
-    //   url={SOCKET_URL}
-    //   topics={['/sos/topic/sensor']}
-    //   onConnect={onConnected}
-    //   onDisconnect={console.log("Disconnected!")}
-    //   onMessage={msg => onMessageReceived(msg)}
-    //   debug={false}
-    // />
-    null
+    <SockJsClient
+      url={SOCKET_URL}
+      topics={['/topic/greetings']}
+      onConnect={onConnected}
+      onDisconnect={console.log("Disconnected!")}
+      onMessage={msg => onMessageReceived(msg)}
+      debug={false}
+      autoReconnect
+    />
   )
 }
