@@ -6,10 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Popover from '@mui/material/Popover';
 import Filter from '../../filter/Filter'
-import { getSensorTableFilterConfig } from '../../filter/FilterConfigs';
 
 export default function SensorTableToolbar(props) {
-    const { numSensors } = props
+    const { numSensors, filters, onFilterChange } = props
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const handleClose = () => {
@@ -43,7 +42,7 @@ export default function SensorTableToolbar(props) {
                     horizontal: 'left',
                 }}
             >
-                <Filter filters={getSensorTableFilterConfig()} onFilterChange={() => { }} handleClose={handleClose} />
+                <Filter filters={filters} onFilterChange={onFilterChange} handleClose={handleClose} />
             </Popover>
         </Toolbar>
     );

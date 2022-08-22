@@ -18,6 +18,7 @@ import CustomTableHead from '../TableHead'
 import { SensorContext } from '../../ContentManager'
 import { getComparator } from '../TableUtil'
 import DataManager from '../../data-manager/DataManager'
+import { getSensorTableFilterConfig } from '../../filter/FilterConfigs';
 
 const cells = [
     {
@@ -64,6 +65,24 @@ const cells = [
     },
 ];
 
+const filterData = (filters) => (row) => {
+    return filters.every(filter => {
+        if (!filter.value) {
+            return true
+        }
+        switch (filter.id) {
+            case 'sensor':
+                return filter.value === row.shortName
+            case 'start':
+                return new Date(filter.value) < new Date(row.validTimeStart)
+            case 'end':
+                return new Date(filter.value) > new Date(row.validTimeEnd)
+            default:
+                return true
+        }
+    })
+}
+
 export default function SensorTable() {
     const { filters, sensors, setSensors } = useContext(SensorContext)
     const [order, setOrder] = useState('asc');
@@ -72,6 +91,7 @@ export default function SensorTable() {
     const [rows, setRows] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState([]);
+    const [tableFilters, setTableFilters] = useState(getSensorTableFilterConfig());
 
     const handleRequestSort = (
         event,
@@ -127,34 +147,20 @@ export default function SensorTable() {
         setPage(0);
     };
 
+    const handleTableFilterChange = (filters) => {
+        setTableFilters(filters)
+    }
+
     const isSelected = (shortName) => sensors.indexOf(shortName) !== -1;
     const isOpen = (shortName) => open.indexOf(shortName) !== -1;
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const globalFilter = (row) => {
-        return filters.every(filter => {
-            if (!filter.value) {
-                return true
-            }
-            switch (filter.id) {
-                case 'sensor':
-                    return filter.value === row.shortName
-                case 'start':
-                    return new Date(filter.value) < new Date(row.validTimeStart)
-                case 'end':
-                    return new Date(filter.value) > new Date(row.validTimeEnd)
-                default:
-                    return true
-            }
-        })
-    }
-
     return (
         <Box sx={{ width: '100%', height: '100%' }}>
             <Paper sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <TableToolbar numSensors={rows.length} />
+                <TableToolbar numSensors={rows.length} filters={tableFilters} onFilterChange={handleTableFilterChange} />
                 <Paper sx={{ overflow: 'auto', flexGrow: 1 }}>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -175,7 +181,7 @@ export default function SensorTable() {
                             setRows(newRows)
                         }} />
                         <TableBody>
-                            {rows.slice().sort(getComparator(order, orderBy, cells)).filter(globalFilter)
+                            {rows.slice().sort(getComparator(order, orderBy, cells)).filter(filterData(filters)).filter(filterData(tableFilters))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.shortName);

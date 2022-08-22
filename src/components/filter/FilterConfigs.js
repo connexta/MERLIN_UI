@@ -52,13 +52,13 @@ const snesorTableFilters = [
     {
         id: "start",
         label: "Start Date",
-        value: '',
+        value: null,
         type: 'date'
     },
     {
         id: "end",
         label: "End Date",
-        value: '',
+        value: null,
         type: 'date'
     }
 ]
