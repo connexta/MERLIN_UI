@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: merlin-ui
-          image: registry.local/merlin-ui:latest
+          image: registry.localdev.me/merlin-ui:latest
           ports:
             - containerPort: 3000
               name: merlin-ui-port
