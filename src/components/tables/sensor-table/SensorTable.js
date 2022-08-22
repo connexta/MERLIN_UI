@@ -229,14 +229,15 @@ export default function SensorTable() {
                                                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
                                                     <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
                                                         <Box sx={{ margin: 1 }}>
-                                                            <Typography variant="p" gutterBottom component="div">
-                                                                Capabilities
+                                                            <Typography variant="p" sx={{ fontWeight: 'bold' }} gutterBottom component="div">
+                                                                Capabilities:
                                                             </Typography>
                                                             {Object.keys(capabilities).map((key) => (
-                                                                <><Typography variant="h6" gutterBottom component="div">
-                                                                    {key}
-                                                                </Typography>
-                                                                    <Table size="small" aria-label="purchases">
+                                                                <Fragment key={key}>
+                                                                    <Typography variant="p" gutterBottom component="div">
+                                                                        {key}
+                                                                    </Typography>
+                                                                    <Table size="small" sx={{ marginBottom: '12px' }}>
                                                                         <TableHead>
                                                                             <TableRow>
                                                                                 <TableCell>Name</TableCell>
@@ -256,7 +257,7 @@ export default function SensorTable() {
                                                                             ))}
                                                                         </TableBody>
                                                                     </Table>
-                                                                </>
+                                                                </Fragment>
                                                             ))}
                                                         </Box>
                                                     </Collapse>
@@ -284,7 +285,7 @@ export default function SensorTable() {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-            </Paper>
+            </Paper >
         </Box >
     );
 }
