@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableHead from './TableHead'
 import { SensorContext } from '../ContentManager'
 import { getComparator } from './TableUtil'
+import WebSocketManager from '../WebSocketManager'
 
 const rows = [
     { id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
@@ -62,6 +63,13 @@ export default function ObservationTable() {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [selected, setSelected] = useState([]);
+
+    // useEffect(() => {
+    //     let webSocketManager = WebSocketManager.getInstance()
+    //     webSocketManager.setObservationListener((message) => {
+    //         console.log("observation topic message recieved", message)
+    //     })
+    // }, [])
 
     const handleRequestSort = (
         event,

@@ -1,4 +1,4 @@
-import { useContext, useState, Fragment } from 'react';
+import { useContext, useState, Fragment, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,7 +17,7 @@ import TableToolbar from './SensorTableToolBar'
 import CustomTableHead from '../TableHead'
 import { SensorContext } from '../../ContentManager'
 import { getComparator } from '../TableUtil'
-import DataManager from '../../data-manager/DataManager'
+import WebSocketManager from '../../WebSocketManager'
 import { getSensorTableFilterConfig } from '../../filter/FilterConfigs';
 
 const cells = [
@@ -92,6 +92,15 @@ export default function SensorTable() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState([]);
     const [tableFilters, setTableFilters] = useState(getSensorTableFilterConfig());
+
+    useEffect(() => {
+        let webSocketManager = WebSocketManager.getInstance()
+        webSocketManager.setSensorListener((message) => {
+            console.log("sensor topic message recieved", message)
+            const newRows = rows.concat(message)
+            setRows(newRows)
+        })
+    }, [])
 
     const handleRequestSort = (
         event,
@@ -175,11 +184,6 @@ export default function SensorTable() {
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                         />
-                        <DataManager onMessage={(row) => {
-                            const jsonObj = JSON.parse(row)
-                            const newRows = rows.concat(jsonObj)
-                            setRows(newRows)
-                        }} />
                         <TableBody>
                             {rows.slice().sort(getComparator(order, orderBy, cells)).filter(filterData(filters)).filter(filterData(tableFilters))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
