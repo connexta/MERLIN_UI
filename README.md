@@ -16,7 +16,7 @@ $ npm install
 $ npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser. Next.js features Fast Refresh, components will be automatically re-rendered when a file is updated.
+Open [http://localhost:3000/merlin](http://localhost:3000/merlin) with your browser. Next.js features Fast Refresh, components will be automatically re-rendered when a file is updated.
 
 ## Local Deployment
 
@@ -32,7 +32,7 @@ Run the container:
 $ docker run -p 3000:3000 merlin-ui
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000/merlin](http://localhost:3000/merlin)
 
 ## Kubernetes Deployment
 The instructions below assume a locally running `Kubernetes` cluster (like k3s) running its own `Docker` registry. 
