@@ -1,7 +1,7 @@
 import SockJS from 'sockjs-client'
 import Stomp from 'stomp-websocket'
 
-const socketURL = 'http://merlin.localdev.me/sos'
+const socketURL = 'http://merlin.localdev.me/sos/websocket'
 const sensorTopic = '/topic/sensors'
 const observationTopic = '/topic/observations'
 
@@ -18,7 +18,7 @@ export default class WebSocketManager {
   constructor() {
     const socket = new SockJS(socketURL);
     this.stompClient = Stomp.over(socket);
-    this.stompClient.debug = null
+//    this.stompClient.debug = null
     this.promise = new Promise((resolve, reject) => {
       this.stompClient.connect({}, () => {
         resolve()
