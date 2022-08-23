@@ -64,12 +64,13 @@ export default function ObservationTable() {
     const [orderBy, setOrderBy] = useState('');
     const [selected, setSelected] = useState([]);
 
-    // useEffect(() => {
-    //     let webSocketManager = WebSocketManager.getInstance()
-    //     webSocketManager.setObservationListener((message) => {
-    //         console.log("observation topic message recieved", message)
-    //     })
-    // }, [])
+    useEffect(() => {
+        let webSocketManager = WebSocketManager.getInstance()
+        webSocketManager.setObservationListener("observation", (message) => {
+            console.log("observation topic message recieved", message)
+        })
+        return () => webSocketManager.unsubscribe("observation")
+    }, [])
 
     const handleRequestSort = (
         event,

@@ -95,11 +95,12 @@ export default function SensorTable() {
 
     useEffect(() => {
         let webSocketManager = WebSocketManager.getInstance()
-        webSocketManager.setSensorListener((message) => {
+        webSocketManager.setSensorListener("sensor", (message) => {
             console.log("sensor topic message recieved", message)
             const newRows = rows.concat(message)
             setRows(newRows)
         })
+        return () => webSocketManager.unsubscribe("sensor")
     }, [])
 
     const handleRequestSort = (
@@ -236,7 +237,7 @@ export default function SensorTable() {
                                                             <Typography variant="p" sx={{ fontWeight: 'bold' }} gutterBottom component="div">
                                                                 Capabilities:
                                                             </Typography>
-                                                            {Object.keys(capabilities).map((key) => (
+                                                            {capabilities && Object.keys(capabilities).map((key) => (
                                                                 <Fragment key={key}>
                                                                     <Typography variant="p" gutterBottom component="div">
                                                                         {key}
