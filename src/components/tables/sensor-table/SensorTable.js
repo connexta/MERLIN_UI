@@ -19,6 +19,7 @@ import { SensorContext } from '../../ContentManager'
 import { getComparator } from '../TableUtil'
 import WebSocketManager from '../../WebSocketManager'
 import { getSensorTableFilterConfig } from '../../filter/FilterConfigs';
+import { v4 as uuidv4 } from 'uuid';
 
 const cells = [
     {
@@ -93,14 +94,16 @@ export default function SensorTable() {
     const [open, setOpen] = useState([]);
     const [tableFilters, setTableFilters] = useState(getSensorTableFilterConfig());
 
+
+    const webId = uuidv4()
     useEffect(() => {
         let webSocketManager = WebSocketManager.getInstance()
-        webSocketManager.setSensorListener("sensor", (message) => {
+        webSocketManager.setSensorListener(webId, (message) => {
             console.log("sensor topic message recieved", message)
             const newRows = rows.concat(message)
             setRows(newRows)
         })
-        return () => webSocketManager.unsubscribe("sensor")
+        return () => webSocketManager.unsubscribe(webId)
     }, [])
 
     const handleRequestSort = (

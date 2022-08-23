@@ -10,26 +10,9 @@ import TableHead from './TableHead'
 import { SensorContext } from '../ContentManager'
 import { getComparator } from './TableUtil'
 import WebSocketManager from '../WebSocketManager'
+import { v4 as uuidv4 } from 'uuid';
 
-const rows = [
-    { id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-    { id: 1, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-    { id: 2, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-    { id: 3, resultTime: "2013-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-    { id: 4, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-    { id: 5, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
-    { id: 6, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 7, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 8, resultTime: "2012-03-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 9, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 10, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 11, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 12, resultTime: "2012-01-04T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 13, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 14, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" },
-    { id: 15, resultTime: "2012-01-01T00:04:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor3', description: "description" },
-    { id: 16, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor3', description: "thisis a very long description it is very very long" }
-];
+// { id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
 
 const cells = [
     {
@@ -63,13 +46,17 @@ export default function ObservationTable() {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [selected, setSelected] = useState([]);
+    const [rows, setRows] = useState([]);
 
+    const websocketId = uuidv4()
     useEffect(() => {
         let webSocketManager = WebSocketManager.getInstance()
-        webSocketManager.setObservationListener("observation", (message) => {
+        webSocketManager.setObservationListener(websocketId, (message) => {
             console.log("observation topic message recieved", message)
+            const newRows = rows.concat(message)
+            setRows(newRows)
         })
-        return () => webSocketManager.unsubscribe("observation")
+        return () => webSocketManager.unsubscribe(websocketId)
     }, [])
 
     const handleRequestSort = (

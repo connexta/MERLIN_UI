@@ -48,8 +48,11 @@ export default class WebSocketManager {
   }
 
   unsubscribe(id) {
-    if (this.subscriptions[id]) {
-      this.stompClient.unsubscribe(this.subscriptions[id])
-    }
+    this.promise.then(() => {
+      if (this.subscriptions[id]) {
+        this.stompClient.unsubscribe(this.subscriptions[id])
+        this.subscriptions[id] = null
+      }
+    })
   }
 }
