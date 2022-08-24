@@ -107,15 +107,15 @@ export default function SensorTable() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.shortName);
+            const newSelected = rows.map((n) => n.assignedOffering);
             dispatch(selectSensor(newSelected))
             return;
         }
         dispatch(selectSensor([]))
     };
 
-    const handleClick = (event, shortName) => {
-        dispatch(selectSensor(shortName))
+    const handleClick = (event, id) => {
+        dispatch(selectSensor(id))
     };
 
     const handleOpen = (shortName) => {
@@ -163,7 +163,7 @@ export default function SensorTable() {
                             {rows.slice().sort(getComparator(order, orderBy, cells)).filter(filterData(filters)).filter(filterData(tableFilters))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.shortName);
+                                    const isItemSelected = isSelected(row.assignedOffering);
                                     const isItemOpen = isOpen(row.shortName);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     const capabilities = row.capabilities
@@ -178,7 +178,7 @@ export default function SensorTable() {
                                             >
                                                 <TableCell padding="checkbox">
                                                     <Checkbox
-                                                        onClick={(event) => handleClick(event, row.shortName)}
+                                                        onClick={(event) => handleClick(event, row.assignedOffering)}
                                                         color="primary"
                                                         checked={isItemSelected}
                                                         inputProps={{

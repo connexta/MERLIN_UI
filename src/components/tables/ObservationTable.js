@@ -32,10 +32,10 @@ const cells = [
         id: "sensor"
     },
     {
-        label: 'Description',
+        label: 'Type',
         type: 'string',
         align: 'left',
-        id: "description"
+        id: "type"
     }
 ]
 
@@ -66,7 +66,7 @@ export default function ObservationTable() {
 
     const sensorFilter = (row) => {
         if (sensors.length > 0) {
-            return sensors.indexOf(row.sensor) !== -1
+            return sensors.indexOf(row.offering) !== -1
         }
         return true
     }
@@ -127,10 +127,10 @@ export default function ObservationTable() {
                                                 }}
                                             />
                                         </TableCell>
-                                        <TableCell>{row.resultTime}</TableCell>
-                                        <TableCell>{row.collectTime}</TableCell>
-                                        <TableCell>{row.sensor}</TableCell>
-                                        <TableCell>{row.description}</TableCell>
+                                        <TableCell>{row.observation.resultTime.timePosition}</TableCell>
+                                        <TableCell>{row.observation.phenomenonTime.beginPosition}</TableCell>
+                                        <TableCell>{row.offering}</TableCell>
+                                        <TableCell>{row.observation.type}</TableCell>
                                     </TableRow>
                                 );
                             })}

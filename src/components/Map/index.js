@@ -1,3 +1,6 @@
-import SimpleMap from './MapBase'
+import dynamic from 'next/dynamic'
+const Map = dynamic(() => import('./Map'), {
+    ssr: false,
+})
 
-export default SimpleMap
+export default Map
