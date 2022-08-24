@@ -6,6 +6,9 @@ import { getFlexConfig } from './flex/FlexConfigs';
 import { getHeaderFilterConfig } from './filter/FilterConfigs';
 import { styled } from '@mui/system';
 import debounce from 'lodash.debounce';
+import WebSocketManager from './WebSocketManager'
+import { useDispatch } from 'react-redux'
+import { addSensorData, addObservationData } from './reducer'
 
 const Wrapper = styled('div')({
     height: "100vh",
@@ -26,8 +29,9 @@ const filterStorage = "filterName"
 
 export default function Container() {
     const [model, setModel] = useState(Model.fromJson(getFlexConfig()));
-    const [sensors, setSensors] = useState([]);
     const [filters, setFilters] = useState(getHeaderFilterConfig());
+    const dispatch = useDispatch()
+
     useEffect(() => {
         const storedLayout = localStorage.getItem(layoutStorage)
         if (storedLayout !== null) {
@@ -37,6 +41,19 @@ export default function Container() {
         if (storedFilters !== null) {
             setFilters(JSON.parse(storedFilters))
         }
+        // let webSocketManager = WebSocketManager.getInstance()
+        // webSocketManager.setSensorListener("sensor", (message) => {
+        //     console.log("sensor topic message recieved", message)
+        //     dispatch(addSensorData(message))
+        // })
+        // webSocketManager.setObservationListener("observations", (message) => {
+        //     console.log("observation topic message recieved", message)
+        //     dispatch(addObservationData(message))
+        // })
+        // return () => {
+        //     webSocketManager.unsubscribe("sensor")
+        //     webSocketManager.unsubscribe("observations")
+        // }
     }, [])
     const flexRef = useRef(0);
     const setRef = (ref) => {
@@ -68,7 +85,7 @@ export default function Container() {
         <Wrapper>
             <Header onAddComponent={handleAddComponent} onFilterChange={handleFilterChange} filters={filters} />
             <FlexLayoutWrapper>
-                <SensorContext.Provider value={{ sensors, setSensors, filters }}>
+                <SensorContext.Provider value={{ filters }}>
                     <FlexLayout model={model} setRef={setRef} />
                 </SensorContext.Provider>
             </FlexLayoutWrapper>

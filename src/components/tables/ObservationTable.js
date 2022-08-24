@@ -9,10 +9,8 @@ import Checkbox from '@mui/material/Checkbox';
 import TableHead from './TableHead'
 import { SensorContext } from '../ContentManager'
 import { getComparator } from './TableUtil'
-import WebSocketManager from '../WebSocketManager'
-import { v4 as uuidv4 } from 'uuid';
-
-// { id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" },
+import { useSelector, useDispatch } from 'react-redux'
+import { selectObservation } from '../reducer'
 
 const cells = [
     {
@@ -42,23 +40,14 @@ const cells = [
 ]
 
 export default function ObservationTable() {
-    const { sensors, filters } = useContext(SensorContext)
+    const { filters } = useContext(SensorContext)
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
-    const [selected, setSelected] = useState([]);
-    const [rows, setRows] = useState([]);
-
-    const websocketId = uuidv4()
-    useEffect(() => {
-        let webSocketManager = WebSocketManager.getInstance()
-        webSocketManager.setObservationListener(websocketId, (message) => {
-            console.log("observation topic message recieved", message)
-            const newRows = rows.concat(message)
-            setRows(newRows)
-        })
-        return () => webSocketManager.unsubscribe(websocketId)
-    }, [])
-
+    const rows = useSelector((state) => state.data.observationData)
+    const sensors = useSelector((state) => state.data.sensorSelected)
+    const observations = useSelector((state) => state.data.observationSelected)
+    const dispatch = useDispatch()
+    console.log(observations)
     const handleRequestSort = (
         event,
         property,
@@ -71,36 +60,17 @@ export default function ObservationTable() {
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.id);
-            setSelected(newSelected);
+            dispatch(selectObservation(newSelected))
             return;
         }
-        setSelected([]);
+        dispatch(selectObservation([]))
     };
 
     const handleClick = (event, id) => {
-        setSelected(handleSelection(id, selected));
+        dispatch(selectObservation(id))
     };
 
-    const handleSelection = (id, selections) => {
-        const selectedIndex = selections.indexOf(id);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selections, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selections.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selections.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selections.slice(0, selectedIndex),
-                selections.slice(selectedIndex + 1),
-            );
-        }
-        return newSelected
-    }
-
-    const isSelected = (id) => selected.indexOf(id) !== -1;
+    const isSelected = (id) => observations.indexOf(id) !== -1;
 
     const sensorFilter = (row) => {
         if (sensors.length > 0) {
@@ -136,7 +106,7 @@ export default function ObservationTable() {
                 >
                     <TableHead
                         headCells={cells}
-                        numSelected={selected.length}
+                        numSelected={observations.length}
                         order={order}
                         orderBy={orderBy}
                         onSelectAllClick={handleSelectAllClick}

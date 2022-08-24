@@ -17,9 +17,9 @@ import TableToolbar from './SensorTableToolBar'
 import CustomTableHead from '../TableHead'
 import { SensorContext } from '../../ContentManager'
 import { getComparator } from '../TableUtil'
-import WebSocketManager from '../../WebSocketManager'
 import { getSensorTableFilterConfig } from '../../filter/FilterConfigs';
-import { v4 as uuidv4 } from 'uuid';
+import { useSelector, useDispatch } from 'react-redux'
+import { selectSensor } from '../../reducer'
 
 const cells = [
     {
@@ -85,26 +85,16 @@ const filterData = (filters) => (row) => {
 }
 
 export default function SensorTable() {
-    const { filters, sensors, setSensors } = useContext(SensorContext)
+    const { filters } = useContext(SensorContext)
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
-    const [rows, setRows] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState([]);
     const [tableFilters, setTableFilters] = useState(getSensorTableFilterConfig());
-
-
-    const webId = uuidv4()
-    useEffect(() => {
-        let webSocketManager = WebSocketManager.getInstance()
-        webSocketManager.setSensorListener(webId, (message) => {
-            console.log("sensor topic message recieved", message)
-            const newRows = rows.concat(message)
-            setRows(newRows)
-        })
-        return () => webSocketManager.unsubscribe(webId)
-    }, [])
+    const rows = useSelector((state) => state.data.sensorData)
+    const sensors = useSelector((state) => state.data.sensorSelected)
+    const dispatch = useDispatch()
 
     const handleRequestSort = (
         event,
@@ -118,38 +108,19 @@ export default function SensorTable() {
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.shortName);
-            setSensors(newSelected);
+            dispatch(selectSensor(newSelected))
             return;
         }
-        setSensors([]);
+        dispatch(selectSensor([]))
     };
 
     const handleClick = (event, shortName) => {
-        setSensors(handleSelection(shortName, sensors));
+        dispatch(selectSensor(shortName))
     };
 
     const handleOpen = (shortName) => {
-        setOpen(handleSelection(shortName, open));
+        setOpen([shortname]);
     };
-
-    const handleSelection = (shortName, selections) => {
-        const selectedIndex = selections.indexOf(shortName);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selections, shortName);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selections.slice(1));
-        } else if (selectedIndex === sensors.length - 1) {
-            newSelected = newSelected.concat(selections.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selections.slice(0, selectedIndex),
-                selections.slice(selectedIndex + 1),
-            );
-        }
-        return newSelected
-    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -169,6 +140,8 @@ export default function SensorTable() {
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+    console.log(sensors)
 
     return (
         <Box sx={{ width: '100%', height: '100%' }}>
