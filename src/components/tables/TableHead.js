@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
 export default function SensorTableHead(props) {
-    const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, disableCheckbox } =
         props;
     const createSortHandler =
         (property) => (event) => {
@@ -15,14 +15,15 @@ export default function SensorTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                    />
-                </TableCell>
+                {disableCheckbox ? <TableCell /> :
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            color="primary"
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                        />
+                    </TableCell>}
                 {headCells.map((headCell, index) => (
                     <TableCell
                         key={headCell.id}

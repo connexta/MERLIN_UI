@@ -1,6 +1,7 @@
 import Observations from '../tables/ObservationTable'
 import Sensors from '../tables/sensor-table/SensorTable'
 import Map from '../Map'
+import ObservationDetails from '../ObservationDetails'
 
 const components = [{
     id: "sensor-capabilities",
@@ -14,6 +15,10 @@ const components = [{
     id: "map",
     component: Map,
     label: "Map"
+}, {
+    id: "observation-details",
+    component: ObservationDetails,
+    label: "Observation Details"
 }]
 
 const flexStartConfig = {

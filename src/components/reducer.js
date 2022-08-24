@@ -197,7 +197,7 @@ export const dataManager = createSlice({
         observationData: [{ id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'M35-GBOSS', description: "description" }, { id: 1, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'M35-GBOSS1', description: "description" }
         ],
         sensorSelected: [],
-        observationSelected: [],
+        observationSelected: null,
         filters: getHeaderFilterConfig()
     },
     reducers: {
@@ -210,18 +210,11 @@ export const dataManager = createSlice({
             state.observationData.push(action.payload)
         },
         selectSensor: (state, action) => {
-            if (Array.isArray(action.payload)) {
-                state.sensorSelected = action.payload
-            } else {
-                state.sensorSelected = handleSelection(action.payload, state.sensorSelected)
-            }
+            Array.isArray(action.payload) ? state.sensorSelected = action.payload : state.sensorSelected = handleSelection(action.payload, state.sensorSelected)
         },
         selectObservation: (state, action) => {
-            if (Array.isArray(action.payload)) {
-                state.observationSelected = action.payload
-            } else {
-                state.observationSelected = handleSelection(action.payload, state.observationSelected)
-            }
+            state.observationSelected === action.payload ? state.observationSelected = null : state.observationSelected = action.payload
+            console.log(action, state)
         },
         setFilters: (state, action) => {
             if (action.payload === "clear") {
@@ -235,7 +228,6 @@ export const dataManager = createSlice({
     },
 })
 
-// Action creators are generated for each case reducer function
 export const { addSensorData, addObservationData, selectSensor, selectObservation, setFilters } = dataManager.actions
 
 export default dataManager.reducer

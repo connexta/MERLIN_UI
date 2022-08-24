@@ -44,7 +44,7 @@ export default function ObservationTable() {
     const [orderBy, setOrderBy] = useState('');
     const rows = useSelector((state) => state.data.observationData)
     const sensors = useSelector((state) => state.data.sensorSelected)
-    const observations = useSelector((state) => state.data.observationSelected)
+    const observation = useSelector((state) => state.data.observationSelected)
     const filters = useSelector((state) => state.data.filters)
     const dispatch = useDispatch()
 
@@ -57,20 +57,12 @@ export default function ObservationTable() {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
-            dispatch(selectObservation(newSelected))
-            return;
-        }
-        dispatch(selectObservation([]))
-    };
-
     const handleClick = (event, id) => {
+        console.log(id)
         dispatch(selectObservation(id))
     };
 
-    const isSelected = (id) => observations.indexOf(id) !== -1;
+    const isSelected = (id) => observation === id;
 
     const sensorFilter = (row) => {
         if (sensors.length > 0) {
@@ -106,10 +98,9 @@ export default function ObservationTable() {
                 >
                     <TableHead
                         headCells={cells}
-                        numSelected={observations.length}
+                        disableCheckbox
                         order={order}
                         orderBy={orderBy}
-                        onSelectAllClick={handleSelectAllClick}
                         onRequestSort={handleRequestSort}
                         rowCount={rows.length}
                     />
