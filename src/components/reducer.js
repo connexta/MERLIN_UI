@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getHeaderFilterConfig } from './filter/FilterConfigs';
 
 const json = `{
     "longName": "M35-GBOSS",
@@ -197,6 +198,7 @@ export const dataManager = createSlice({
         ],
         sensorSelected: [],
         observationSelected: [],
+        filters: getHeaderFilterConfig()
     },
     reducers: {
         addSensorData: (state, action) => {
@@ -221,10 +223,19 @@ export const dataManager = createSlice({
                 state.observationSelected = handleSelection(action.payload, state.observationSelected)
             }
         },
+        setFilters: (state, action) => {
+            if (action.payload === "clear") {
+                state.filters = state.filters.map(filter => { return filter.type === 'date' ? { ...filter, value: null } : { ...filter, value: '' } })
+            } else {
+                state.filters = action.payload
+            }
+            const jsonStr = JSON.stringify(state.filters, null, "\t");
+            localStorage.setItem("filterName", jsonStr);
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addSensorData, addObservationData, selectSensor, selectObservation } = dataManager.actions
+export const { addSensorData, addObservationData, selectSensor, selectObservation, setFilters } = dataManager.actions
 
 export default dataManager.reducer

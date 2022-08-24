@@ -13,6 +13,8 @@ import Collapse from '@mui/material/Collapse';
 import AddComponent from './AddComponent'
 import Filter from './filter/Filter'
 import { styled } from '@mui/system';
+import { useSelector, useDispatch } from 'react-redux'
+import { setFilters } from './reducer'
 
 const FilterDisplay = styled('div')({
     paddingRight: "24px",
@@ -34,9 +36,14 @@ const StyledChip = styled(Chip)({
 
 
 export default function Header(props) {
-    const { onAddComponent, onFilterChange, filters } = props
+    const { onAddComponent } = props
+    const filters = useSelector((state) => state.data.filters)
+    const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = useState(null)
     const [type, setType] = useState(null)
+    const onFilterChange = (filters) => {
+        dispatch(setFilters(filters))
+    }
     const handleClose = () => {
         setAnchorEl(null);
         setType(null);

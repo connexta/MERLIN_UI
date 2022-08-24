@@ -85,7 +85,6 @@ const filterData = (filters) => (row) => {
 }
 
 export default function SensorTable() {
-    const { filters } = useContext(SensorContext)
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [page, setPage] = useState(0);
@@ -94,6 +93,7 @@ export default function SensorTable() {
     const [tableFilters, setTableFilters] = useState(getSensorTableFilterConfig());
     const rows = useSelector((state) => state.data.sensorData)
     const sensors = useSelector((state) => state.data.sensorSelected)
+    const filters = useSelector((state) => state.data.filters)
     const dispatch = useDispatch()
 
     const handleRequestSort = (
@@ -140,8 +140,6 @@ export default function SensorTable() {
 
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    console.log(sensors)
 
     return (
         <Box sx={{ width: '100%', height: '100%' }}>

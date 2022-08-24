@@ -40,14 +40,14 @@ const cells = [
 ]
 
 export default function ObservationTable() {
-    const { filters } = useContext(SensorContext)
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const rows = useSelector((state) => state.data.observationData)
     const sensors = useSelector((state) => state.data.sensorSelected)
     const observations = useSelector((state) => state.data.observationSelected)
+    const filters = useSelector((state) => state.data.filters)
     const dispatch = useDispatch()
-    console.log(observations)
+
     const handleRequestSort = (
         event,
         property,
