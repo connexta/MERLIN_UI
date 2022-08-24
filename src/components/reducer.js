@@ -194,7 +194,7 @@ export const dataManager = createSlice({
     name: 'data',
     initialState: {
         sensorData: [JSON.parse(json), JSON.parse(json1)],
-        observationData: [{ id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor1', description: "description" }, { id: 1, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'Temperature Sensor2', description: "description" }
+        observationData: [{ id: 0, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'M35-GBOSS', description: "description" }, { id: 1, resultTime: "2012-01-01T00:00:00.000Z", collectTime: '2013-05-22T09:47:20.000Z', sensor: 'M35-GBOSS1', description: "description" }
         ],
         sensorSelected: [],
         observationSelected: [],

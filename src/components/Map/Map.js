@@ -10,19 +10,20 @@ export default function MapWrapper(props) {
     const [map, setMap] = useState()
     const [featuresLayer, setFeaturesLayer] = useState()
     const [selectedCoord, setSelectedCoord] = useState()
-    const mapElement = useRef()
+    console.log("whhsaduifhdslfhlsdkajhfldshlfjhdsa"
+    )
     useEffect(() => {
-        const initalFeaturesLayer = new VectorLayer({
-            source: new VectorSource()
-        })
-
+        // const initalFeaturesLayer = new VectorLayer({
+        //     source: new VectorSource()
+        // }) csused failure
+        const source = new OSM()
         const initialMap = new Map({
-            target: mapElement.current,
+            target: props.mapElement.current,
             layers: [
                 new TileLayer({
                     source: new OSM()
                 }),
-                initalFeaturesLayer
+                // initalFeaturesLayer
             ],
             view: new View({
                 // projection: 'EPSG:3857',
@@ -32,7 +33,7 @@ export default function MapWrapper(props) {
             controls: []
         })
         setMap(initialMap)
-        setFeaturesLayer(initalFeaturesLayer)
+        // setFeaturesLayer(initalFeaturesLayer)
         return () => initialMap.setTarget(undefined);
     }, [])
     props.node.setEventListener("resize", (p) => {
@@ -40,7 +41,7 @@ export default function MapWrapper(props) {
     })
 
     return (
-        <div ref={mapElement} className="map-container" style={{ height: '100%', width: '100%' }}></div>
+        null
     )
 
 }
