@@ -119,7 +119,7 @@ export default function SensorTable() {
     };
 
     const handleOpen = (shortName) => {
-        setOpen([shortname]);
+        setOpen([shortName]);
     };
 
     const handleChangePage = (event, newPage) => {
