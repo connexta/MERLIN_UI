@@ -119,16 +119,16 @@ export default function SensorTable() {
     };
 
     const handleOpen = (shortName) => {
-        setOpen([shortName]);
+        open.includes(shortName) ? setOpen([]) : setOpen([shortName])
     };
 
     const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+        setPage(newPage)
     };
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        setPage(0)
     };
 
     const handleTableFilterChange = (filters) => {
