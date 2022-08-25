@@ -125,7 +125,7 @@ export default class WebSocketManager {
         this.unsubscribe(id)
       }
       const subscriptionId = this.stompClient.subscribe(topic, (message) =>
-        onMessage(JSON.parse(ob2))
+        onMessage(JSON.parse(message.body))
       )
       this.subscriptions[id] = subscriptionId.id
     })

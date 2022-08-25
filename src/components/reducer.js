@@ -355,7 +355,7 @@ const handleSelection = (id, selections) => {
 export const dataManager = createSlice({
   name: 'data',
   initialState: {
-    sensorData: [JSON.parse(sensor1), JSON.parse(sensor2)],
+    sensorData: [], //[JSON.parse(sensor1), JSON.parse(sensor2)],
     observationData: [], //[{ ...JSON.parse(ob1), id: uuidv4() }, { ...JSON.parse(ob2), id: uuidv4() }],
     sensorSelected: [],
     observationSelected: null,
