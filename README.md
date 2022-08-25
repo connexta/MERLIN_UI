@@ -18,6 +18,12 @@ $ npm run dev
 
 Open [http://localhost:3000/merlin](http://localhost:3000/merlin) with your browser. Next.js features Fast Refresh, components will be automatically re-rendered when a file is updated.
 
+Format code:
+
+```shell
+$ npm run format
+```
+
 ## Local Deployment
 
 Build the container:
@@ -62,3 +68,7 @@ In a web browser, access `merlin-UI` at `http://merlin.localdev.me/merlin`.
 - [React Documentation](https://reactjs.org/docs/getting-started.html)
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Material UI Documentation](https://mui.com/material-ui/getting-started/overview/)
+- [Redux](https://redux.js.org/api/api-reference)
+- [SockJS](https://github.com/sockjs/sockjs-client)
+- [Stomp Websocket](https://github.com/jmesnil/stomp-websocket)
+- [FlexLayout](https://www.npmjs.com/package/flexlayout-react)

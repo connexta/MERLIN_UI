@@ -90,7 +90,7 @@ export default function MapWrapper(props) {
         duration: 1000,
       })
     }
-  }, [observation, data])
+  }, [observation, data, map, featuresLayer])
 
   props.node.setEventListener('resize', (p) => {
     setTimeout(() => {
