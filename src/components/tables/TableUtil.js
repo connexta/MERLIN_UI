@@ -1,9 +1,12 @@
+const resolvePath = (object, path) =>
+  path.split('.').reduce((o, p) => o?.[p], object)
+
 function descendingComparator(a, b, orderBy, type) {
-  let first = a[orderBy]
-  let second = b[orderBy]
+  let first = resolvePath(a, orderBy)
+  let second = resolvePath(b, orderBy)
   if (type === 'date') {
-    first = new Date(a[orderBy])
-    second = new Date(b[orderBy])
+    first = new Date(first)
+    second = new Date(second)
   }
   if (second < first) {
     return -1

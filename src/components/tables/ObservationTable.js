@@ -16,25 +16,25 @@ const cells = [
     label: 'Result Time',
     type: 'date',
     align: 'left',
-    id: 'resultTime',
+    id: 'observation.resultTime.timePosition',
   },
   {
     label: 'Collect Time',
     type: 'date',
     align: 'left',
-    id: 'collectTime',
+    id: 'observation.phenomenonTime.beginPosition',
   },
   {
     label: 'Sensor',
     type: 'string',
     align: 'left',
-    id: 'sensor',
+    id: 'offering',
   },
   {
     label: 'Type',
     type: 'string',
     align: 'left',
-    id: 'type',
+    id: 'observation.type',
   },
 ]
 
