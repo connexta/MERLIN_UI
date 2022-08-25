@@ -4,25 +4,28 @@ import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import OSM from 'ol/source/OSM';
+import OSM from 'ol/source/OSM'
+import Feature from 'ol/Feature'
+import { useSelector } from 'react-redux'
+import Point from 'ol/geom/Point'
+import { fromLonLat } from 'ol/proj'
 
 export default function MapWrapper(props) {
     const [map, setMap] = useState()
     const [featuresLayer, setFeaturesLayer] = useState()
     const [selectedCoord, setSelectedCoord] = useState()
+
+    const data = useSelector((state) => state.data.observationData)
+    const observation = useSelector((state) => state.data.observationSelected)
+
     const mapElement = useRef()
     useEffect(() => {
-        const initalFeaturesLayer = new VectorLayer({
-            source: new VectorSource()
-        })
-
         const initialMap = new Map({
             target: mapElement.current,
             layers: [
                 new TileLayer({
                     source: new OSM()
-                }),
-                initalFeaturesLayer
+                })
             ],
             view: new View({
                 projection: 'EPSG:3857',//projection: 'EPSG:4979',
@@ -32,9 +35,37 @@ export default function MapWrapper(props) {
             controls: []
         })
         setMap(initialMap)
-        setFeaturesLayer(initalFeaturesLayer)
         return () => initialMap.setTarget(undefined);
     }, [])
+
+    useEffect(() => {
+        if (map) {
+            let features = data.map(ob => {
+                if (ob.observation.featureOfInterest) {
+                    const longlat = ob.observation.featureOfInterest.shape.pos.split(' ')
+                    return new Feature({
+                        geometry: new Point(fromLonLat([longlat[1], longlat[0]], 'EPSG:3857')),
+                        name: ob.observation.featureOfInterest.identifier,
+                    });
+                }
+            }).filter(ob => ob !== null)
+
+            const featuresLayer = new VectorLayer({
+                source: new VectorSource({
+                    features: features
+                })
+            })
+            featuresLayer.set('type', "GEO")
+            map.addLayer(featuresLayer)
+            const newExtent = featuresLayer.getSource().getExtent()
+            map.getView().fit(newExtent, {
+                padding: [50, 50, 50, 50],
+                maxZoom: 5,
+            })
+
+        }
+    }, [map, data])
+
     props.node.setEventListener("resize", (p) => {
         setTimeout(() => { map.updateSize(); }, 200);
     })

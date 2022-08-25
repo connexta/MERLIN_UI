@@ -5,8 +5,8 @@ const socketURL = 'http://merlin.localdev.me/sos/websocket'
 const sensorTopic = '/topic/sensors'
 const observationTopic = '/topic/observations'
 
-// const testTopic = '/topic/greetings'
-// const SOCKET_URL_test = 'http://localhost:8080/gs-guide-websocket';
+const testTopic = '/topic/greetings'
+const SOCKET_URL_test = 'http://localhost:8080/gs-guide-websocket';
 export default class WebSocketManager {
 
   static myInstance = null;
@@ -16,9 +16,9 @@ export default class WebSocketManager {
   promise
 
   constructor() {
-    const socket = new SockJS(socketURL);
+    const socket = new SockJS(SOCKET_URL_test);
     this.stompClient = Stomp.over(socket);
-//    this.stompClient.debug = null
+    //    this.stompClient.debug = null
     this.promise = new Promise((resolve, reject) => {
       this.stompClient.connect({}, () => {
         resolve()
@@ -33,7 +33,7 @@ export default class WebSocketManager {
     return this.myInstance;
   }
 
-  setSensorListener(id, onMessage) { this.setListener(onMessage, sensorTopic, id) }
+  setSensorListener(id, onMessage) { this.setListener(onMessage, testTopic, id) }
 
   setObservationListener(id, onMessage) { this.setListener(onMessage, observationTopic, id) }
 

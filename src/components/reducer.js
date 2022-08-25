@@ -193,7 +193,7 @@ const ob1 = `{
             "boundedBy": true,
             "shape": {
                 "type": "Point",
-                "pos": "39.337821 -86.005393",
+                "pos": "32.337821 -85.005393",
                 "srsName": "EPSG:4979",
                 "srsDimension": 3
             }

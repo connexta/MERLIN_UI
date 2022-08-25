@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,7 +7,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import TableHead from './TableHead'
-import { SensorContext } from '../ContentManager'
 import { getComparator } from './TableUtil'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectObservation } from '../reducer'
@@ -80,9 +79,9 @@ export default function ObservationTable() {
                 case 'sensor':
                     return filter.value === row.sensor
                 case 'start':
-                    return new Date(filter.value) < new Date(row.resultTime) && new Date(filter.value) < new Date(row.collectTime)
+                    return new Date(filter.value) < new Date(row.observation.resultTime.timePosition) || new Date(filter.value) < new Date(row.observation.phenomenonTime.beginPosition)
                 case 'end':
-                    return new Date(filter.value) > new Date(row.resultTime) && new Date(filter.value) > new Date(row.collectTime)
+                    return new Date(filter.value) > new Date(row.observation.resultTime.timePosition) || new Date(filter.value) > new Date(row.observation.phenomenonTime.beginPosition)
                 default:
                     return true
             }
