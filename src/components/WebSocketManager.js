@@ -94,7 +94,7 @@ export default class WebSocketManager {
   promise
 
   constructor() {
-    const socket = new SockJS(SOCKET_URL_test)
+    const socket = new SockJS(socketURL)
     this.stompClient = Stomp.over(socket)
     //    this.stompClient.debug = null
     this.promise = new Promise((resolve, reject) => {
@@ -116,7 +116,7 @@ export default class WebSocketManager {
   }
 
   setObservationListener(id, onMessage) {
-    this.setListener(onMessage, testTopic, id)
+    this.setListener(onMessage, observationTopic, id)
   }
 
   setListener(onMessage, topic, id) {

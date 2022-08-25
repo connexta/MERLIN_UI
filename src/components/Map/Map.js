@@ -38,7 +38,7 @@ export default function MapWrapper(props) {
   }, [])
 
   useEffect(() => {
-    if (map) {
+    if (map && data.length > 0) {
       let features = data
         .map((ob) => {
           if (ob.observation.featureOfInterest) {
@@ -67,12 +67,13 @@ export default function MapWrapper(props) {
       map.getView().fit(newExtent, {
         padding: [50, 50, 50, 50],
         maxZoom: 5,
+        duration: 1000,
       })
     }
   }, [map, data])
 
   useEffect(() => {
-    if (map) {
+    if (map && featuresLayer) {
       let newExtent
       if (!observation) {
         newExtent = featuresLayer.getSource().getExtent()
