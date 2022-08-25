@@ -1,4 +1,4 @@
-import ContentManager from '../src/components/ContentManager';
+import ContentManager from '../src/components/ContentManager'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import reducer from '../src/components/reducer'
@@ -9,7 +9,9 @@ const store = configureStore({
 })
 
 export default function Index() {
-  return (<Provider store={store}>
-    <ContentManager />
-  </Provider>)
+  return (
+    <Provider store={store}>
+      <ContentManager />
+    </Provider>
+  )
 }
