@@ -42,6 +42,7 @@ export default function ObservationTable() {
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('')
   const rows = useSelector((state) => state.data.observationData)
+  const sensorData = useSelector((state) => state.data.sensorData)
   const sensors = useSelector((state) => state.data.sensorSelected)
   const observation = useSelector((state) => state.data.observationSelected)
   const filters = useSelector((state) => state.data.filters)
@@ -61,7 +62,14 @@ export default function ObservationTable() {
 
   const sensorFilter = (row) => {
     if (sensors.length > 0) {
-      return sensors.indexOf(row.offering) !== -1
+      const sensorOfferings = sensorData
+        .map((sensor) => {
+          if (sensors.indexOf(sensor.id) !== -1) {
+            return sensor.assignedOffering
+          }
+        })
+        .filter((offering) => offering !== null)
+      return sensorOfferings.indexOf(row.offering) !== -1
     }
     return true
   }
@@ -72,8 +80,6 @@ export default function ObservationTable() {
         return true
       }
       switch (filter.id) {
-        case 'sensor':
-          return filter.value === row.sensor
         case 'start':
           return (
             new Date(filter.value) <

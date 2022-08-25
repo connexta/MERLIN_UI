@@ -104,7 +104,7 @@ export default function SensorTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.assignedOffering)
+      const newSelected = rows.map((n) => n.id)
       dispatch(selectSensor(newSelected))
       return
     }
@@ -115,8 +115,8 @@ export default function SensorTable() {
     dispatch(selectSensor(id))
   }
 
-  const handleOpen = (shortName) => {
-    open.includes(shortName) ? setOpen([]) : setOpen([shortName])
+  const handleOpen = (id) => {
+    open.includes(id) ? setOpen([]) : setOpen([id])
   }
 
   const handleChangePage = (event, newPage) => {
@@ -132,8 +132,8 @@ export default function SensorTable() {
     setTableFilters(filters)
   }
 
-  const isSelected = (shortName) => sensors.indexOf(shortName) !== -1
-  const isOpen = (shortName) => open.indexOf(shortName) !== -1
+  const isSelected = (id) => sensors.indexOf(id) !== -1
+  const isOpen = (id) => open.indexOf(id) !== -1
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
@@ -172,12 +172,12 @@ export default function SensorTable() {
                 .filter(filterData(tableFilters))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.assignedOffering)
-                  const isItemOpen = isOpen(row.shortName)
+                  const isItemSelected = isSelected(row.id)
+                  const isItemOpen = isOpen(row.id)
                   const labelId = `enhanced-table-checkbox-${index}`
                   const capabilities = row.capabilities
                   return (
-                    <Fragment key={row.shortName}>
+                    <Fragment key={row.id}>
                       <TableRow
                         hover
                         role="checkbox"
@@ -186,9 +186,7 @@ export default function SensorTable() {
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={(event) =>
-                              handleClick(event, row.assignedOffering)
-                            }
+                            onClick={(event) => handleClick(event, row.id)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -205,7 +203,7 @@ export default function SensorTable() {
                           <IconButton
                             aria-label="expand row"
                             size="small"
-                            onClick={() => handleOpen(row.shortName)}
+                            onClick={() => handleOpen(row.id)}
                           >
                             {isItemOpen ? (
                               <KeyboardArrowUpIcon />

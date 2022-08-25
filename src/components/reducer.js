@@ -363,7 +363,7 @@ export const dataManager = createSlice({
   },
   reducers: {
     addSensorData: (state, action) => {
-      state.sensorData.push(action.payload)
+      state.sensorData.push({ ...action.payload, id: uuidv4() })
     },
     addObservationData: (state, action) => {
       state.observationData.push({ ...action.payload, id: uuidv4() })
