@@ -13,7 +13,6 @@ import { fromLonLat } from 'ol/proj'
 export default function MapWrapper(props) {
     const [map, setMap] = useState()
     const [featuresLayer, setFeaturesLayer] = useState()
-    const [selectedCoord, setSelectedCoord] = useState()
 
     const data = useSelector((state) => state.data.observationData)
     const observation = useSelector((state) => state.data.observationSelected)
@@ -28,7 +27,7 @@ export default function MapWrapper(props) {
                 })
             ],
             view: new View({
-                projection: 'EPSG:3857',//projection: 'EPSG:4979',
+                projection: 'EPSG:3857',
                 center: [0, 0],
                 zoom: 2
             }),
@@ -45,6 +44,7 @@ export default function MapWrapper(props) {
                     const longlat = ob.observation.featureOfInterest.shape.pos.split(' ')
                     return new Feature({
                         geometry: new Point(fromLonLat([longlat[1], longlat[0]], 'EPSG:3857')),
+                        id: ob.id,
                         name: ob.observation.featureOfInterest.identifier,
                     });
                 }
@@ -57,6 +57,7 @@ export default function MapWrapper(props) {
             })
             featuresLayer.set('type', "GEO")
             map.addLayer(featuresLayer)
+            setFeaturesLayer(featuresLayer)
             const newExtent = featuresLayer.getSource().getExtent()
             map.getView().fit(newExtent, {
                 padding: [50, 50, 50, 50],
@@ -65,6 +66,26 @@ export default function MapWrapper(props) {
 
         }
     }, [map, data])
+
+    useEffect(() => {
+        if (map) {
+            let newExtent
+            if (!observation) {
+                newExtent = featuresLayer.getSource().getExtent()
+            } else {
+                const features = featuresLayer.getSource().getFeatures()
+                const selectedFeature = features.find((feature) => {
+                    return feature.getProperties().id === observation
+                })
+                newExtent = selectedFeature.getGeometry().getExtent()
+            }
+            map.getView().fit(newExtent, {
+                padding: [50, 50, 50, 50],
+                maxZoom: 5,
+                duration: 1000
+            })
+        }
+    }, [observation, data])
 
     props.node.setEventListener("resize", (p) => {
         setTimeout(() => { map.updateSize(); }, 200);
